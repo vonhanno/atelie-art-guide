@@ -1,6 +1,16 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
+  "globalEnv": [
+    "ALGOLIA_APP_ID",
+    "ALGOLIA_API_KEY",
+    "ALGOLIA_INDEX_NAME",
+    "OPENAI_API_KEY",
+    "AI_PROVIDER",
+    "REDIS_URL",
+    "FIREBASE_PROJECT_ID",
+    "FIREBASE_SERVICE_ACCOUNT"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

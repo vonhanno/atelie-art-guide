@@ -73,6 +73,7 @@ export function ArtworkSearch() {
       searchArtworks(1);
     }, 300);
     return () => clearTimeout(timeoutId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, artist, availability, technique]);
 
   const toggleSelection = (artworkId: string) => {

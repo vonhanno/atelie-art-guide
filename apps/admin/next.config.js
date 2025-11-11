@@ -5,9 +5,7 @@ const nextConfig = {
   // Vercel optimizations
   output: "standalone",
   // Ensure monorepo packages are included
-  experimental: {
-    outputFileTracingRoot: require("path").join(__dirname, "../.."),
-  },
+  outputFileTracingRoot: require("path").join(__dirname, "../.."),
 };
 
 module.exports = nextConfig;
