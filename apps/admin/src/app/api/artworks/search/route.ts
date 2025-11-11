@@ -21,8 +21,9 @@ export async function GET(request: NextRequest) {
   if (technique) params.append("technique", technique);
 
   try {
-    if (!API_URL || API_URL === "http://localhost:3001") {
-      // Return empty results if API is not configured
+    // Only skip API call if API_URL is explicitly not set (not just localhost)
+    if (!API_URL) {
+      console.warn("API_URL not configured, returning empty results");
       return NextResponse.json({
         hits: [],
         nbHits: 0,
