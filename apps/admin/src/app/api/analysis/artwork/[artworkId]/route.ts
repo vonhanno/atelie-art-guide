@@ -4,10 +4,11 @@ const API_URL = process.env.API_URL || "http://localhost:3001";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { artworkId: string } }
+  { params }: { params: Promise<{ artworkId: string }> }
 ) {
   try {
-    const response = await fetch(`${API_URL}/api/analysis/artwork/${params.artworkId}`);
+    const { artworkId } = await params;
+    const response = await fetch(`${API_URL}/api/analysis/artwork/${artworkId}`);
     if (!response.ok) {
       return NextResponse.json({ error: "Analysis not found" }, { status: 404 });
     }

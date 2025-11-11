@@ -17,7 +17,7 @@ import { RefreshCw, AlertCircle, CheckCircle2, Clock, Loader2 } from "lucide-rea
 const API_URL = "/api";
 
 interface BatchStatusProps {
-  onSelectAnalysis?: (id: string) => void;
+  onSelectAnalysis?: (_id: string) => void;
 }
 
 export function BatchStatus({ onSelectAnalysis }: BatchStatusProps) {
