@@ -17,6 +17,9 @@ async function start() {
         process.env.NEXTAUTH_URL || "http://localhost:3000",
         "http://localhost:3002", // Agent app
         process.env.AGENT_URL || "http://localhost:3002",
+        // iOS app - allow all origins for mobile apps (iOS doesn't have CORS restrictions)
+        // but we include common patterns for development
+        true, // Allow all origins for mobile apps
       ],
     });
 

@@ -28,7 +28,7 @@ export function BatchStatus({ onSelectAnalysis }: BatchStatusProps) {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/analysis/status`);
+      const response = await fetch(`${API_URL}/analysis/status`);
       if (!response.ok) {
         throw new Error(`Failed to fetch: ${response.status}`);
       }
@@ -56,7 +56,7 @@ export function BatchStatus({ onSelectAnalysis }: BatchStatusProps) {
         params.append("status", statusFilter);
       }
 
-      const response = await fetch(`${API_URL}/api/analysis?${params}`);
+      const response = await fetch(`${API_URL}/analysis?${params}`);
       if (!response.ok) {
         throw new Error(`Failed to fetch: ${response.status}`);
       }
@@ -85,7 +85,7 @@ export function BatchStatus({ onSelectAnalysis }: BatchStatusProps) {
 
   const handleRetry = async (id: string) => {
     try {
-      const response = await fetch(`${API_URL}/api/analysis/retry/${id}`, {
+      const response = await fetch(`${API_URL}/analysis/retry/${id}`, {
         method: "POST",
       });
       if (response.ok) {

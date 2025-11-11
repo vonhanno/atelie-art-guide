@@ -51,7 +51,7 @@ export function ArtworkSearch() {
       if (availability) params.append("availability", availability);
       if (technique) params.append("technique", technique);
 
-      const response = await fetch(`${API_URL}/api/artworks/search?${params}`);
+      const response = await fetch(`${API_URL}/artworks/search?${params}`);
       if (!response.ok) {
         throw new Error(`Failed to fetch: ${response.status}`);
       }
@@ -102,7 +102,7 @@ export function ArtworkSearch() {
 
     setEnqueueing(true);
     try {
-      const response = await fetch(`${API_URL}/api/analysis/enqueue`, {
+      const response = await fetch(`${API_URL}/analysis/enqueue`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ artworkIds: Array.from(selectedIds) }),

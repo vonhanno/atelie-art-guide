@@ -22,7 +22,7 @@ export function AnalysisPreview({ analysisId }: AnalysisPreviewProps) {
   const fetchAnalysis = async (id: string) => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/api/analysis/${id}`);
+      const response = await fetch(`${API_URL}/analysis/${id}`);
       if (response.ok) {
         const data: AIAnalysisResult = await response.json();
         setAnalysis(data);
@@ -38,7 +38,7 @@ export function AnalysisPreview({ analysisId }: AnalysisPreviewProps) {
     if (!artworkIdInput) return;
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/api/analysis/artwork/${artworkIdInput}`);
+      const response = await fetch(`${API_URL}/analysis/artwork/${artworkIdInput}`);
       if (response.ok) {
         const data: AIAnalysisResult = await response.json();
         setAnalysis(data);
@@ -88,7 +88,7 @@ export function AnalysisPreview({ analysisId }: AnalysisPreviewProps) {
   const handleReanalyze = async () => {
     if (!analysis) return;
     try {
-      const response = await fetch(`${API_URL}/api/analysis/retry/${analysis.id}`, {
+      const response = await fetch(`${API_URL}/analysis/retry/${analysis.id}`, {
         method: "POST",
       });
       if (response.ok) {
