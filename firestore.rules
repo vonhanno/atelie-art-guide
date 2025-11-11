@@ -1,0 +1,13 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Artwork Analyses collection
+    // Note: Firebase Admin SDK bypasses these rules
+    // These rules apply only to client SDK access
+    match /artworkAnalyses/{document} {
+      // Deny all client access - Admin SDK handles all operations
+      allow read, write: if false;
+    }
+  }
+}
+

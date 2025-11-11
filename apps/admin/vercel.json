@@ -1,0 +1,8 @@
+{
+  "buildCommand": "cd ../.. && pnpm build --filter=@atelie/admin",
+  "devCommand": "cd ../.. && pnpm dev --filter=@atelie/admin",
+  "installCommand": "cd ../.. && pnpm install",
+  "framework": "nextjs",
+  "outputDirectory": ".next"
+}
+
