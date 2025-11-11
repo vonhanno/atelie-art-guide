@@ -29,7 +29,7 @@ const API_URL = "/api";
 export function ArtworkSearch() {
   const [query, setQuery] = useState("");
   const [artist, setArtist] = useState("");
-  const [availability, setAvailability] = useState("");
+  const [availability, setAvailability] = useState("all");
   const [technique, setTechnique] = useState("");
   const [artworks, setArtworks] = useState<AlgoliaArtwork[]>([]);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -48,7 +48,7 @@ export function ArtworkSearch() {
       });
       if (query) params.append("q", query);
       if (artist) params.append("artist", artist);
-      if (availability) params.append("availability", availability);
+      if (availability && availability !== "all") params.append("availability", availability);
       if (technique) params.append("technique", technique);
 
       const response = await fetch(`${API_URL}/artworks/search?${params}`);
@@ -162,7 +162,7 @@ export function ArtworkSearch() {
                     <SelectValue placeholder="All" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All</SelectItem>
+                    <SelectItem value="all">All</SelectItem>
                     <SelectItem value="available">Available</SelectItem>
                     <SelectItem value="sold">Sold</SelectItem>
                   </SelectContent>
