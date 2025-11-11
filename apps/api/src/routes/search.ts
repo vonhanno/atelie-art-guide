@@ -17,9 +17,15 @@ const algoliaClient = algoliasearch(
 );
 const index = algoliaClient.initIndex(process.env.ALGOLIA_INDEX_NAME || "artworks");
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Lazy initialization - only create OpenAI client when needed
+function getOpenAIClient() {
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error("OPENAI_API_KEY environment variable is required for AI search features");
+  }
+  return new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+}
 
 // Schemas
 const textSearchSchema = z.object({
@@ -49,7 +55,7 @@ async function analyzeRoomImage(imageUrl?: string, imageBase64?: string): Promis
     ? { type: "image_url" as const, image_url: { url: `data:image/jpeg;base64,${imageBase64}` } }
     : { type: "image_url" as const, image_url: { url: imageUrl! } };
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAIClient().chat.completions.create({
     model: "gpt-4o",
     messages: [
       {
@@ -92,7 +98,7 @@ async function analyzeRoomImage(imageUrl?: string, imageBase64?: string): Promis
  * Analyze text query using OpenAI
  */
 async function analyzeTextQuery(query: string): Promise<TextQueryCriteria> {
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAIClient().chat.completions.create({
     model: "gpt-4o",
     messages: [
       {
