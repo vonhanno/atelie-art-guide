@@ -7,15 +7,27 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
-    const response = await fetch(`${API_URL}/api/analysis/${id}`);
-    if (!response.ok) {
-      return NextResponse.json({ error: "Analysis not found" }, { status: 404 });
+    if (!API_URL || API_URL === "http://localhost:3001") {
+      return NextResponse.json({ error: "API server not configured" }, { status: 503 });
     }
+    
+    const { id } = await params;
+    const response = await fetch(`${API_URL}/api/analysis/${id}`, {
+      next: { revalidate: 10 },
+    });
+    
+    if (!response.ok) {
+      return NextResponse.json({ error: "Analysis not found" }, { status: response.status });
+    }
+    
     const data = await response.json();
     return NextResponse.json(data);
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch analysis" }, { status: 500 });
+  } catch (error: any) {
+    console.error("Error fetching analysis:", error);
+    return NextResponse.json(
+      { error: error.message || "Failed to fetch analysis" },
+      { status: 500 }
+    );
   }
 }
 

@@ -52,6 +52,9 @@ export function ArtworkSearch() {
       if (technique) params.append("technique", technique);
 
       const response = await fetch(`${API_URL}/api/artworks/search?${params}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch: ${response.status}`);
+      }
       const data: ArtworkSearchResponse = await response.json();
 
       if (pageNum === 1) {
@@ -63,6 +66,12 @@ export function ArtworkSearch() {
       setTotalPages(data.nbPages);
     } catch (error) {
       console.error("Error searching artworks:", error);
+      // Set empty results to prevent crash
+      if (pageNum === 1) {
+        setArtworks([]);
+        setPage(1);
+        setTotalPages(0);
+      }
     } finally {
       setLoading(false);
     }

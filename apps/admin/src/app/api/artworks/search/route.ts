@@ -21,11 +21,37 @@ export async function GET(request: NextRequest) {
   if (technique) params.append("technique", technique);
 
   try {
-    const response = await fetch(`${API_URL}/api/artworks/search?${params}`);
+    if (!API_URL || API_URL === "http://localhost:3001") {
+      // Return empty results if API is not configured
+      return NextResponse.json({
+        hits: [],
+        nbHits: 0,
+        page: Number(page),
+        nbPages: 0,
+        hitsPerPage: Number(hitsPerPage),
+      });
+    }
+    
+    const response = await fetch(`${API_URL}/api/artworks/search?${params}`, {
+      next: { revalidate: 10 },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API responded with status ${response.status}`);
+    }
+    
     const data = await response.json();
     return NextResponse.json(data);
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to search artworks" }, { status: 500 });
+  } catch (error: any) {
+    console.error("Error searching artworks:", error);
+    // Return empty results instead of error
+    return NextResponse.json({
+      hits: [],
+      nbHits: 0,
+      page: Number(page),
+      nbPages: 0,
+      hitsPerPage: Number(hitsPerPage),
+    });
   }
 }
 

@@ -12,11 +12,35 @@ export async function GET(request: NextRequest) {
   if (status) params.append("status", status);
 
   try {
-    const response = await fetch(`${API_URL}/api/analysis?${params}`);
+    if (!API_URL || API_URL === "http://localhost:3001") {
+      // Return empty results if API is not configured
+      return NextResponse.json({
+        results: [],
+        total: 0,
+        limit: Number(limit),
+        offset: Number(offset),
+      });
+    }
+    
+    const response = await fetch(`${API_URL}/api/analysis?${params}`, {
+      next: { revalidate: 5 },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API responded with status ${response.status}`);
+    }
+    
     const data = await response.json();
     return NextResponse.json(data);
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch analyses" }, { status: 500 });
+  } catch (error: any) {
+    console.error("Error fetching analyses:", error);
+    // Return empty results instead of error
+    return NextResponse.json({
+      results: [],
+      total: 0,
+      limit: Number(limit),
+      offset: Number(offset),
+    });
   }
 }
 

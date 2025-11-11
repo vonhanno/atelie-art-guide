@@ -29,10 +29,22 @@ export function BatchStatus({ onSelectAnalysis }: BatchStatusProps) {
   const fetchStats = async () => {
     try {
       const response = await fetch(`${API_URL}/api/analysis/status`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch: ${response.status}`);
+      }
       const data: AnalysisStats = await response.json();
       setStats(data);
     } catch (error) {
       console.error("Error fetching stats:", error);
+      // Set default stats to prevent crash
+      setStats({
+        total: 0,
+        pending: 0,
+        processing: 0,
+        done: 0,
+        failed: 0,
+        successRate: 0,
+      });
     }
   };
 
@@ -45,10 +57,15 @@ export function BatchStatus({ onSelectAnalysis }: BatchStatusProps) {
       }
 
       const response = await fetch(`${API_URL}/api/analysis?${params}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch: ${response.status}`);
+      }
       const data = await response.json();
       setAnalyses(data.results || []);
     } catch (error) {
       console.error("Error fetching analyses:", error);
+      // Set empty array to prevent crash
+      setAnalyses([]);
     } finally {
       setLoading(false);
     }
